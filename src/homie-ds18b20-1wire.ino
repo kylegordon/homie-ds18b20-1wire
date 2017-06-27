@@ -2,8 +2,8 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-#define FW_NAME "homie-ds18b20-wire"
-#define FW_VERSION "0.1.0"
+#define FW_NAME "homie-ds18b20-wire-kitchen"
+#define FW_VERSION "0.1.1"
 
 /* Magic sequence for Autodetectable Binary Upload */
 const char *__FLAGGED_FW_NAME = "\xbf\x84\xe4\x13\x54" FW_NAME "\x93\x44\x6b\xa7\x75";
@@ -25,8 +25,10 @@ DallasTemperature DS18B20(&oneWire);
 // "28ac871d300e4": Garage
 
 
-HomieNode ROM_28b8c81d300e5("28b8c81d300e5", "temperature");
-HomieNode ROM_28ac871d300e4("28ac871d300e4", "temperature");
+HomieNode ROM_Temp0("Temp0", "temperature");
+HomieNode ROM_Temp1("Temp1", "temperature");
+HomieNode ROM_Temp2("Temp2", "temperature");
+
 
 
 void loopHandler() {
@@ -37,10 +39,12 @@ void loopHandler() {
 
                 float temp0 = 22.12;
                 float temp1 = 33.33;
+                float temp2 = 44.44;
 
                 DS18B20.requestTemperatures();
                 temp0 = DS18B20.getTempCByIndex(0);
                 temp1 = DS18B20.getTempCByIndex(1);
+                temp2 = DS18B20.getTempCByIndex(2);
 
                 Serial.print("Temperature: ");
                 Serial.print(temp0);
@@ -50,21 +54,27 @@ void loopHandler() {
                 Serial.print(temp1);
                 Serial.println(" °C");
 
+                Serial.print("Temperature: ");
+                Serial.print(temp2);
+                Serial.println(" °C");
 
-                if (Homie.setNodeProperty(ROM_28b8c81d300e5, "degrees", String(temp0), true)) {
+
+                if (Homie.setNodeProperty(ROM_Temp0, "degrees", String(temp0), true)) {
                             last_temp_sent = millis();
                 }
 
-                Homie.setNodeProperty(ROM_28ac871d300e4, "degrees", String(temp1), true);
+                Homie.setNodeProperty(ROM_Temp1, "degrees", String(temp1), true);
+                Homie.setNodeProperty(ROM_Temp2, "degrees", String(temp2), true);
 
-                // Homie.setNodeProperty(ROM_28b8c81d300e5, "freeheap", String(ESP.getFreeHeap(),DEC), false);
+                // Homie.setNodeProperty(ROM_Temp0, "freeheap", String(ESP.getFreeHeap(),DEC), false);
         }
 
 }
 
 void setupHandler() {
-        Homie.setNodeProperty(ROM_28b8c81d300e5, "unit", "c", true);
-        Homie.setNodeProperty(ROM_28ac871d300e4, "unit", "c", true);
+        Homie.setNodeProperty(ROM_Temp0, "unit", "c", true);
+        Homie.setNodeProperty(ROM_Temp1, "unit", "c", true);
+        Homie.setNodeProperty(ROM_Temp2, "unit", "c", true);
 }
 
 void setup() {
@@ -73,8 +83,9 @@ void setup() {
 
         Homie.setFirmware(FW_NAME, FW_VERSION);
 
-        Homie.registerNode(ROM_28b8c81d300e5);
-        Homie.registerNode(ROM_28ac871d300e4);
+        Homie.registerNode(ROM_Temp0);
+        Homie.registerNode(ROM_Temp1);
+        Homie.registerNode(ROM_Temp2);
 
         Homie.setSetupFunction(setupHandler);
         Homie.setLoopFunction(loopHandler);
@@ -85,4 +96,3 @@ void setup() {
 void loop() {
         Homie.loop();
 }
-
