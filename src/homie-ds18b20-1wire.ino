@@ -3,7 +3,7 @@
 #include <DallasTemperature.h>
 
 #define FW_NAME "homie-ds18b20-wire-kitchen"
-#define FW_VERSION "0.1.1"
+#define FW_VERSION "0.1.2"
 
 /* Magic sequence for Autodetectable Binary Upload */
 const char *__FLAGGED_FW_NAME = "\xbf\x84\xe4\x13\x54" FW_NAME "\x93\x44\x6b\xa7\x75";
@@ -82,6 +82,7 @@ void setup() {
         DS18B20.begin();
 
         Homie.setFirmware(FW_NAME, FW_VERSION);
+        Homie.setLedPin(2, HIGH); // Status LED
 
         Homie.registerNode(ROM_Temp0);
         Homie.registerNode(ROM_Temp1);
