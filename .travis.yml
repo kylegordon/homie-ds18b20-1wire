@@ -17,7 +17,7 @@ env:
 
 install:
     - pip install -U platformio
-    - platformio lib -g install Onewire Jeelib Homie
+    - platformio lib -g install DallasTemperature PubSubClient Onewire Homie
 
 script:
     - platformio ci --board=esp01_1m
