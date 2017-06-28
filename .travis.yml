@@ -13,7 +13,7 @@ cache:
         - "~/.platformio"
 
 env:
-    - PLATFORMIO_CI_SRC=src/homie-sht30.ino
+    - PLATFORMIO_CI_SRC=src/homie-ds18b20-1wire.ino
 
 install:
     - pip install -U platformio
