@@ -17,10 +17,8 @@ env:
 
 install:
     - pip install -U platformio
-    - platformio lib -g install DallasTemperature PubSubClient Onewire Homie
-    - sed -i s/'DynamicJsonBuffer generatedJsonBuffer = DynamicJsonBuffer'/'DynamicJsonBuffer generatedJsonBuffer'/ ~/.platformio/lib/Homie_ID555/src/Homie/Boot/BootConfig.cpp
-    - sed -i s/'DynamicJsonBuffer jsonBuffer = DynamicJsonBuffer'/'DynamicJsonBuffer jsonBuffer'/ ~/.platformio/lib/Homie_ID555/src/Homie/Boot/BootConfig.cpp
-
+    # - platformio lib -g install DallasTemperature PubSubClient Onewire Homie
+    - platformio lib -g install DallasTemperature PubSubClient Onewire https://github.com/marvinroger/homie-esp8266/archive/master.zip
 
 script:
     - platformio ci --board=esp01_1m
