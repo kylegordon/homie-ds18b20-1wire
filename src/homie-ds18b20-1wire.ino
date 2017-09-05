@@ -2,8 +2,8 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-#define FW_NAME "homie-ds18b20-wire-kitchen"
-#define FW_VERSION "2.1.2"
+#define FW_NAME "homie-ds18b20-wire"
+#define FW_VERSION "2.1.3"
 
 /* Magic sequence for Autodetectable Binary Upload */
 const char *__FLAGGED_FW_NAME = "\xbf\x84\xe4\x13\x54" FW_NAME "\x93\x44\x6b\xa7\x75";
@@ -20,6 +20,7 @@ DallasTemperature DS18B20(&oneWire);
 
 // This isn't right, as ideally it would search the bus and find all valid ROM_IDs
 // ROM ID to device translation is done upstream, in node-red
+// Instead, we just iterate by index, using .getTempCByIndex
 
 // "28b8c81d300e5": Rack
 // "28ac871d300e4": Garage
@@ -58,27 +59,20 @@ void loopHandler() {
                 Serial.print(temp2);
                 Serial.println(" °C");
 
-
-                //if (Homie.setNodeProperty(ROM_Temp0, "degrees", String(temp0), true)) {
                 if (ROM_Temp0.setProperty("degrees").send(String(temp0))) {
                             last_temp_sent = millis();
                 }
-                //Homie.setNodeProperty(ROM_Temp1, "degrees", String(temp1), true);
                 ROM_Temp1.setProperty("degrees").send(String(temp1));
-                //Homie.setNodeProperty(ROM_Temp2, "degrees", String(temp2), true);
                 ROM_Temp2.setProperty("degrees").send(String(temp2));
 
-                // Homie.setNodeProperty(ROM_Temp0, "freeheap", String(ESP.getFreeHeap(),DEC), false);
+                ROM_Temp0.setProperty("freeheap").send(String(ESP.getFreeHeap(),DEC));
         }
 
 }
 
 void setupHandler() {
-        //Homie.setNodeProperty(ROM_Temp0, "unit", "c", true);
         ROM_Temp0.setProperty("unit").send("c");
-        //Homie.setNodeProperty(ROM_Temp1, "unit", "c", true);
         ROM_Temp1.setProperty("unit").send("c");
-        //Homie.setNodeProperty(ROM_Temp2, "unit", "c", true);
         ROM_Temp2.setProperty("unit").send("c");
 }
 
@@ -88,10 +82,6 @@ void setup() {
 
         Homie_setFirmware(FW_NAME, FW_VERSION);
         Homie.setLedPin(2, HIGH); // Status LED
-
-        //Homie.registerNode(ROM_Temp0);
-        //Homie.registerNode(ROM_Temp1);
-        //Homie.registerNode(ROM_Temp2);
 
         Homie.setSetupFunction(setupHandler);
         Homie.setLoopFunction(loopHandler);
