@@ -21,4 +21,4 @@ install:
     - platformio lib -g install DallasTemperature PubSubClient Onewire https://github.com/marvinroger/homie-esp8266/archive/develop.zip
 
 script:
-    - platformio ci --board=esp01_1m
+    - platformio ci --board=nodemcu
