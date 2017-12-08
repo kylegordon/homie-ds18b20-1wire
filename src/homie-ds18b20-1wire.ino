@@ -77,6 +77,7 @@ void setupHandler() {
 }
 
 void setup() {
+        Serial.begin(115200);
 
         DS18B20.begin();
 
