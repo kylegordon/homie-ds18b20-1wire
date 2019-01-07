@@ -17,8 +17,7 @@ env:
 
 install:
     - pip install -U platformio
-    # - platformio lib -g install DallasTemperature PubSubClient Onewire Homie
-    - platformio lib -g install DallasTemperature PubSubClient Onewire https://github.com/marvinroger/homie-esp8266/archive/develop.zip
 
 script:
-    - platformio ci --board=nodemcu
+    - platformio lib update
+    - platformio run
