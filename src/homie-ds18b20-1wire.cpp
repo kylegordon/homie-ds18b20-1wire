@@ -1,6 +1,7 @@
 #include <Homie.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
+#include <Arduino.h>
 
 #define FW_NAME "homie-ds18b20-wire"
 #define FW_VERSION "2.1.3"
